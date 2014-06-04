@@ -1,0 +1,28 @@
+
+
+task hello {
+    doLast {
+       println("Hello World Again")
+    }
+}
+
+/** as above, but a shortcut - use this! */
+task helloShortcut(dependsOn: 'hello') <<{
+    println('... and again')
+}
+
+/** '4.times' is merely the number of times we iterate, i.e. task0,..task3 created.
+ * NB, println needs ", not ', here, as we're including a variable*/
+4.times{ counter ->
+    task "task$counter" <<{
+        println "this is task number $counter"
+    }
+}
+
+task myVariable{
+    ext.ourLittleProperty = "Phill & Alan"
+}
+
+task printOurProperty{
+    println myVariable.ourLittleProperty + " did this"
+}
