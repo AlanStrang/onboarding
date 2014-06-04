@@ -1,3 +1,5 @@
+apply plugin: 'java'
+
 /**
  * we ran these tasks by navigating to this directory in command line, and running, for example, 'gradle -q hello',
  * which runs the 'hello' task (-q means that logs are not kept) */
