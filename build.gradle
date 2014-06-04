@@ -1,4 +1,9 @@
+/**
+ * we ran these tasks by navigating to this directory in command line, and running, for example, 'gradle -q hello',
+ * which runs the 'hello' task (-q means that logs are not kept) */
 
+/** default always run... by default */
+defaultTasks 'printOurProperty'
 
 task hello {
     doLast {
@@ -19,10 +24,12 @@ task helloShortcut(dependsOn: 'hello') <<{
     }
 }
 
+/** task simply to set a variable*/
 task myVariable{
     ext.ourLittleProperty = "Phill & Alan"
 }
 
+/** use our initialised variable */
 task printOurProperty{
-    println myVariable.ourLittleProperty + " did this"
+    print myVariable.ourLittleProperty + " did this: "
 }
