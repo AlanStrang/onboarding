@@ -1,0 +1,21 @@
+# Intellij
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven
+log/
+target/
+
+/target
+/lib
+/classes
+*.jar
+
+# java class files
+*.class
+
+# gradle
+.gradle/
+build/

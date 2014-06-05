@@ -1,37 +1,51 @@
 apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
 
-/**
- * we ran these tasks by navigating to this directory in command line, and running, for example, 'gradle -q hello',
- * which runs the 'hello' task (-q means that logs are not kept) */
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
-/** default always run... by default */
-defaultTasks 'printOurProperty'
+mainClassName = 'com.example.helloworld.HelloWorldApplication'
 
-task hello {
-    doLast {
-       println("Hello World Again")
+repositories {
+    maven {
+        url "http://artifactory.slc.co.uk:8080/artifactory/repo1"
+    }
+    maven {
+        url "http://artifactory.slc.co.uk:8080/artifactory/ext-release-local"
+    }
+    maven {
+        url "http://artifactory.slc.co.uk:8080/artifactory/internal-releases"
     }
 }
 
-/** as above, but a shortcut - use this! */
-task helloShortcut(dependsOn: 'hello') <<{
-    println('... and again')
-}
+jar.doFirst {
+    manifest {
+        attributes(
+                "Manifest-Version": "1.0",
+                "Class-Path": configurations.runtime.collect { it.getName() }.join(' '),
+                "Main-Class": mainClassName,
+                "build-version": "unknown",
+                "git-revision": "unknown"
+        )
+    }
 
-/** '4.times' is merely the number of times we iterate, i.e. task0,..task3 created.
- * NB, println needs ", not ', here, as we're including a variable*/
-4.times{ counter ->
-    task "task$counter" <<{
-        println "this is task number $counter"
+    copy {
+        into "$buildDir/libs"
+        from configurations.runtime
     }
 }
 
-/** task simply to set a variable*/
-task myVariable{
-    ext.ourLittleProperty = "Phill & Alan"
+project.ext{
+    dropwizardVersion = '0.7.0'
 }
 
-/** use our initialised variable */
-task printOurProperty{
-    print myVariable.ourLittleProperty + " did this: "
+dependencies {
+    compile ('io.dropwizard:dropwizard-core:'+ dropwizardVersion ) {exclude group:'asm', module: 'asm'}
+    testCompile 'junit:junit:4.+',
+            'org.assertj:assertj-core:1.5.0'
+}
+
+run{
+    args 'server', 'hello-world.yml'
 }
