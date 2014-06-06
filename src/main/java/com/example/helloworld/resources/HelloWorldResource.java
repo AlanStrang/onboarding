@@ -1,5 +1,6 @@
 package com.example.helloworld.resources;
 
+import com.example.helloworld.HelloWorldConfiguration;
 import com.example.helloworld.core.Saying;
 import com.google.common.base.Optional;
 import com.codahale.metrics.annotation.Timed;

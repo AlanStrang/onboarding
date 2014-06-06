@@ -1,0 +1,72 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+
+/**
+ * we ran these tasks by navigating to this directory in command line, and running, for example, 'gradle -q hello',
+ * which runs the 'hello' task (-q means that logs are not kept) */
+
+/** default always run... by default */
+defaultTasks 'printOurProperty'
+
+task hello {
+    doLast {
+       println("Hello World Again")
+    }
+}
+
+/** as above, but a shortcut - use this! */
+task helloShortcut(dependsOn: 'hello') <<{
+    println('... and again')
+}
+
+/** '4.times' is merely the number of times we iterate, i.e. task0,..task3 created.
+ * NB, println needs ", not ', here, as we're including a variable*/
+4.times{ counter ->
+    task "task$counter" <<{
+        println "this is task number $counter"
+    }
+}
+
+/** task simply to set a variable*/
+task myVariable{
+    ext.ourLittleProperty = "Phill & Alan"
+}
+
+/** use our initialised variable */
+task printOurProperty{
+    print myVariable.ourLittleProperty + " did this: "
+}
+
+repositories {
+    maven {
+        url "http://artifactory.slc.co.uk:8080/artifactory/repo1"
+    }
+    maven {
+        url "http://artifactory.slc.co.uk:8080/artifactory/ext-release-local"
+    }
+    maven {
+        url "http://artifactory.slc.co.uk:8080/artifactory/internal-releases"
+    }
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+sourceCompatibility = 1.5
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+    }
+}
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'repos'
+        }
+    }
+}

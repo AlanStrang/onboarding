@@ -1,7 +1,9 @@
 package com.example.helloworld.health;
 
 import com.codahale.metrics.health.HealthCheck;
+import com.example.helloworld.HelloWorldConfiguration;
 
+/** tests run automatically when 'gradle build' run */
 public class TemplateHealthCheck extends HealthCheck {
     private final String template;
 
